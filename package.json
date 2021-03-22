@@ -1,15 +1,17 @@
 {
   "name": "pixi-dynamic-bitmap-fonts",
   "main": "dist/index.js",
-  "version": "0.0.1",
+  "version": "0.0.2-a",
   "author": "Stefan Ginev",
+  "license": "MIT",
   "files": ["dist"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sginev/pixi-dynamic-bitmap-fonts.git"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "release": "npm run build & npm publish"
   },
   "peerDependencies": {
     "pixi.js": "5.3.x"

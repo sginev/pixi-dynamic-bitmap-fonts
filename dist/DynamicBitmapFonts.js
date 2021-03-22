@@ -127,7 +127,7 @@ var DynamicBitmapFonts;
              * Use to add any support for any parts of the text that would be dynamic
              * (i.e. aren't included in predefined localization files)
              **/
-            this.requiredCharacters = CHARACTERS.ASCIIish;
+            this.requiredCharacters = '';
             this.configs = {};
             this.renderer = null;
         }

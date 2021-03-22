@@ -88,7 +88,7 @@ export module DynamicBitmapFonts {
      * Use to add any support for any parts of the text that would be dynamic
      * (i.e. aren't included in predefined localization files) 
      **/
-    public requiredCharacters:string = CHARACTERS.ASCIIish
+    public requiredCharacters:string = '';
     public translations:any;
     public configs:Record<BitmapFontName,FontConfiguration> = {} as any;
     public renderer:PIXI.Renderer|null = null;

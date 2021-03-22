@@ -3,13 +3,13 @@
   "main": "dist/index.js",
   "version": "0.0.1",
   "author": "Stefan Ginev",
-  "private": true,
-  "scripts": {
-    "build": "tsc"
-  },
+  "files": ["dist"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sginev/pixi-dynamic-bitmap-fonts.git"
+  },
+  "scripts": {
+    "build": "tsc"
   },
   "peerDependencies": {
     "pixi.js": "5.3.x"

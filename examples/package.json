@@ -4,7 +4,7 @@
   "author": "Stefan Ginev",
   "keywords": [],
   "license": "ISC",
-  "main": "./index.ts",
+  "main": "./src/index.ts",
   "scripts": {
     "start": "webpack serve"
   },

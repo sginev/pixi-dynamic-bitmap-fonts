@@ -1,5 +1,7 @@
 # pixi-dynamic-bitmap-fonts
 
+[![NPM](https://nodei.co/npm/pixi-dynamic-bitmap-fonts.png)](https://npmjs.org/package/pixi-dynamic-bitmap-fonts)
+
 ## Usage
 
 ```ts

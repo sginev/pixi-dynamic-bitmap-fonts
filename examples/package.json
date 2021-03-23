@@ -9,7 +9,7 @@
     "start": "webpack serve"
   },
   "dependencies": {
-    "pixi-dynamic-bitmap-fonts": "0.0.5",
+    "pixi-dynamic-bitmap-fonts": "0.0.101",
     "pixi.js": "^5.3.8"
   },
   "devDependencies": {

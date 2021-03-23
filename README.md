@@ -2,6 +2,14 @@
 
 [![NPM](https://nodei.co/npm/pixi-dynamic-bitmap-fonts.png)](https://npmjs.org/package/pixi-dynamic-bitmap-fonts)
 
+## Disclaimer
+
+This package is very early work in progress. There will be a lot of breaking changes in future versions and hopefully an actual human-understandable readme.
+
+For now:
+
+----
+
 ## Usage
 
 ```ts

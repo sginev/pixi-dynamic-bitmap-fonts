@@ -8,4 +8,3 @@ document.body.innerHTML = ''
 document.body.appendChild(app.view);
 
 main(app);
-

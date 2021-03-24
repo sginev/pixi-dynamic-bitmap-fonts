@@ -93,7 +93,7 @@ export module DynamicBitmapFonts {
     public configs:Record<BitmapFontName,FontConfiguration> = {} as any;
     public renderer:PIXI.Renderer|null = null;
     
-    public async createBitmapFonts() {
+    public createBitmapFonts() {
       const defaultChars = [
         ...extractUniqueCharacters(
           //// From translations json
@@ -104,17 +104,22 @@ export module DynamicBitmapFonts {
       ].sort();
 
       const entries = Object.entries(this.configs) as [BitmapFontName, FontConfiguration][];
-      for (const [fontName, originalConfig] of entries) {
-        const config = mergeDeep<FontConfiguration>(
-          this.defaultFontConfiguration, 
-          { options: { chars: defaultChars } },
-          originalConfig,
-        );
-        this.createBitmapFont(fontName, config);
-      }
+
+      return entries.map(
+        ([bitmapfontName, originalConfig]) => {
+          const config = mergeDeep<FontConfiguration>(
+            this.defaultFontConfiguration, 
+            { options: { chars: defaultChars } },
+            originalConfig,
+          );
+          return [bitmapfontName,this.createBitmapFont(bitmapfontName, config)] as const;
+        }
+      ).reduce(
+        (a,[bitmapfontName,font]) => ({ ...a, [bitmapfontName]: font }), {}
+      )
     }
       
-    private async createBitmapFont(fontName:BitmapFontName, config:FontConfiguration) {
+    private createBitmapFont(fontName:BitmapFontName, config:FontConfiguration) {
       if (config?.style?.dropShadowDistance) {
         config.style.dropShadowDistance *= config.options.resolution;
       }
@@ -146,6 +151,8 @@ export module DynamicBitmapFonts {
         texture.frame.width += config.options.padding ?? 0.0;
         texture.updateUvs();
       }
+
+      console.debug(`FONT`, font.name, font, PIXI.BitmapFont.available)
 
       return font;
     }

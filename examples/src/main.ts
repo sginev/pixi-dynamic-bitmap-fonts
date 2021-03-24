@@ -1,13 +1,13 @@
 import * as PIXI from "pixi.js";
 
-import DynamicBitmapFonts from "../..";
+import DynamicBitmapFonts from "pixi-dynamic-bitmap-fonts";
+
+import { bitmapFontsConfigs } from "./bitmapFontConfigs";
 
 import en from "./locale/en.json";
 import bg from "./locale/bg.json";
 import it from "./locale/it.json";
 import sp from "./locale/sp.json";
-
-import { bitmapFontsConfigs } from "./bitmapFontConfigs";
 
 const translations = [en, bg, it, sp].map(o => o.data.strings);
 
@@ -27,7 +27,9 @@ export function main({ stage, renderer }: PIXI.Application) {
 
   function test(trans:any, fontIndex=0) {
     man.translations = trans;
-    man.createBitmapFonts();
+    const fonts = man.createBitmapFonts();
+
+    Object.assign( PIXI.BitmapFont.available, fonts );
 
     const testFont = getFonts()[fontIndex];
     console.log( 

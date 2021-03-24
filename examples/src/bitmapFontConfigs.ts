@@ -203,6 +203,7 @@ export const bitmapFontsConfigs:BitmapFontConfigurationsDictionary = {
     },
     xOffset: -7,
     yOffset: -3,
+    localeKeysWhiteList: ["PaytableButtonPlay"]
   },
   tapToContinue: {
     style: {

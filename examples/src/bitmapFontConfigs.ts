@@ -27,7 +27,10 @@ export const bitmapFontsConfigs:BitmapFontConfigurationsDictionary = {
       b.x += 0.5;
       b.tint = 0x00FFFF;
       b.blendMode = PIXI.BLEND_MODES.SCREEN;
-    })
+    }),
+    localeKeysWhiteList: [
+      "MysteryJackpot", "FreeSpinsTitleAnnounce"
+    ]
   },
   freeSpinsAnnounceTitle: {
     style: {
@@ -197,8 +200,6 @@ export const bitmapFontsConfigs:BitmapFontConfigurationsDictionary = {
     options: {
       resolution: 2,
       padding: 12,
-      textureWidth: 1024,
-      textureHeight: 1024,
     },
     xOffset: -7,
     yOffset: -3,

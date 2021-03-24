@@ -52,12 +52,18 @@ export module DynamicBitmapFonts {
 
   //// HELPERS ////
 
-  export function combineStringValues(val: any): string {
+  export function combineStringValues(val: any, keys?:string[]): string {
     if (typeof val === "string") {
       return val;
     }
-    return Object.values<string>(val).reduce(
-      (a, c) => a + combineStringValues(c), "");
+    return Object.entries<string>(val).reduce(
+      (a, [key,value]) => {
+        return (!keys || keys.includes(key) )
+          ? a + combineStringValues(value, keys)
+          : a
+      }, 
+      ""
+    );
   }
 
   export function extractUniqueCharacters(
@@ -76,11 +82,12 @@ export module DynamicBitmapFonts {
         chars: CHARACTERS.ASCIIish,
         resolution: 1.0,
         padding: 1,
-        textureWidth: 1024,
-        textureHeight: 1024,
+        textureWidth: 512,
+        textureHeight: 512,
       },
       xOffset: 0.0,
       yOffset: 0.0,
+
     }
 
     /** 
@@ -120,6 +127,13 @@ export module DynamicBitmapFonts {
     }
       
     private createBitmapFont(fontName:BitmapFontName, config:FontConfiguration) {
+      if ( config.localeKeysWhiteList ) {
+        const allChars = combineStringValues(this.translations, config.localeKeysWhiteList);
+        const uniqueChars = [ ...new Set([...allChars]) ].filter(c => c !== '\n').sort().join('');
+        console.log(fontName, uniqueChars )
+        config.options.chars = uniqueChars;
+      }
+
       if (config?.style?.dropShadowDistance) {
         config.style.dropShadowDistance *= config.options.resolution;
       }
@@ -151,8 +165,6 @@ export module DynamicBitmapFonts {
         texture.frame.width += config.options.padding ?? 0.0;
         texture.updateUvs();
       }
-
-      console.debug(`FONT`, font.name, font, PIXI.BitmapFont.available)
 
       return font;
     }

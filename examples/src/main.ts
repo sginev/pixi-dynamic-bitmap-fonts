@@ -9,11 +9,12 @@ import bg from "./locale/bg.json";
 import it from "./locale/it.json";
 import sp from "./locale/sp.json";
 
-const translations = [en, bg, it, sp].map(o => o.data.strings);
+const localizations = [en, bg, it, sp].map(o => o.data.strings);
 
 export function main({ stage, renderer }: PIXI.Application) {
 
-  let i = 0;
+  let fontIndex = 0;
+  let langIndex = 0;
 
   const man = new DynamicBitmapFonts.Manager();
   man.defaultFontConfiguration.options.resolution = 1.0;
@@ -25,45 +26,52 @@ export function main({ stage, renderer }: PIXI.Application) {
     return  Object.values(PIXI.BitmapFont.available) as DynamicBitmapFonts.BitmapFont[];
   }
 
-  function test(trans:any, fontIndex=0) {
-    man.translations = trans;
+  function test() {
+    man.translations = localizations[langIndex];
     const fonts = man.createBitmapFonts();
 
     Object.assign( PIXI.BitmapFont.available, fonts );
 
-    const testFont = getFonts()[fontIndex];
+    const font = getFonts()[fontIndex];
     console.log( 
-      `[${ fontIndex }] "${ testFont.name }"
-        ${ [...DynamicBitmapFonts.extractUniqueCharacters(trans)].join('') }` )
+      `[${ fontIndex }] "${ font.name }"
+        ${ [...DynamicBitmapFonts.extractUniqueCharacters(man.translations)].join('') }` )
      
-    if ( ! testFont.pageTextures ) {
+    if ( ! font.pageTextures ) {
       return;
     }
 
-    const tex = testFont.pageTextures[0];
-    testFont.pageTextures[0].baseTexture.update();
+    // const tex = testFont.pageTextures[0];
+    // tex.baseTexture.update();
 
     stage.removeChildren();
 
-    let y = testFont.size * 2.0;
-    for ( const [i,t] of Object.values(testFont.pageTextures ?? {} ).entries() ) {
+    let y = font.size * 2.0;
+    for ( const [i,t] of Object.values(font.pageTextures ?? {} ).entries() ) {
       const s = stage.addChild( new PIXI.Sprite(t))
       s.position.y = y;
       y += s.height;
     }
 
-    const t = new PIXI.BitmapText(testFont.name, {
-      fontName: testFont.name,
-    })
+    // const t = new PIXI.BitmapText(testFont.name, { fontName: "Arial" })
+    const t = new PIXI.Text(font.name, { fontfamily: font.font, fontSize : font.size, fill: 'yellow' })
     stage.addChild(t);
   }
 
-  const COMBINE_ALL_LANGUAGES = true;
-  if ( COMBINE_ALL_LANGUAGES ) {
-    test(translations)
-    document.onclick = () => test(translations, ++i % getFonts().length);
-  } else {
-    test(translations[i])
-    document.onclick = () => test(translations[(++i % translations.length)]);
+  ////
+
+  test()
+
+  document.onmousedown = (e) => {
+    console.log(e.button)
+    if ( e.button === 0 ) {
+      langIndex = ( langIndex + 1 ) % localizations.length;
+    } else {
+      fontIndex = ( fontIndex + 1 ) % getFonts().length;
+    }
+    test();
+  }
+  document.oncontextmenu = e => {
+    e.preventDefault();
   }
 }

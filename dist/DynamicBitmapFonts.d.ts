@@ -34,7 +34,7 @@ export declare module DynamicBitmapFonts {
         pageTextures?: Record<number, PIXI.Texture>;
     };
     const shortcuts: typeof _shortcuts;
-    function combineStringValues(val: any): string;
+    function combineStringValues(val: any, keys?: string[]): string;
     function extractUniqueCharacters(...objects: (Record<string, any> | string)[]): string[];
     class Manager<BitmapFontName extends string = string> {
         readonly defaultFontConfiguration: Omit<FontConfiguration, 'style'>;
@@ -47,7 +47,7 @@ export declare module DynamicBitmapFonts {
         translations: any;
         configs: Record<BitmapFontName, FontConfiguration>;
         renderer: PIXI.Renderer | null;
-        createBitmapFonts(): Promise<void>;
+        createBitmapFonts(): {};
         private createBitmapFont;
     }
 }

@@ -18,7 +18,7 @@ export function main({ stage, renderer }: PIXI.Application) {
 
   const man = new DynamicBitmapFonts.Manager();
   man.defaultFontConfiguration.options.resolution = 1.0;
-  //man.requiredCharacters = DynamicBitmapFonts.CHARACTERS.DIGITS;
+  man.requiredCharacters = DynamicBitmapFonts.CHARACTERS.ASCIIish;
   man.configs = bitmapFontsConfigs;
   man.renderer = renderer;
 
@@ -41,6 +41,8 @@ export function main({ stage, renderer }: PIXI.Application) {
       return;
     }
 
+    console.log( font )
+
     // const tex = testFont.pageTextures[0];
     // tex.baseTexture.update();
 
@@ -53,8 +55,8 @@ export function main({ stage, renderer }: PIXI.Application) {
       y += s.height;
     }
 
-    // const t = new PIXI.BitmapText(testFont.name, { fontName: "Arial" })
-    const t = new PIXI.Text(font.name, { fontfamily: font.font, fontSize : font.size, fill: 'yellow' })
+    const t = new PIXI.BitmapText(font.name, { fontName: font.name })
+    // const t = new PIXI.Text(font.name, { fontfamily: font.font, fontSize : font.size, fill: 'yellow' })
     stage.addChild(t);
   }
 

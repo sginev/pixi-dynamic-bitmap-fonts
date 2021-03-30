@@ -11,6 +11,10 @@ import sp from "./locale/sp.json";
 
 const localizations = [en, bg, it, sp].map(o => o.data.strings);
 
+for ( const key in bitmapFontsConfigs ) {
+  bitmapFontsConfigs[key].options.chars += key;
+}
+
 export function main({ stage, renderer }: PIXI.Application) {
 
   let fontIndex = 0;
@@ -18,7 +22,8 @@ export function main({ stage, renderer }: PIXI.Application) {
 
   const man = new DynamicBitmapFonts.Manager();
   man.defaultFontConfiguration.options.resolution = 1.0;
-  man.requiredCharacters = DynamicBitmapFonts.CHARACTERS.ASCIIish;
+  man.defaultFontConfiguration.options.textureWidth = 1024;
+  man.defaultFontConfiguration.options.textureHeight = 1024;
   man.configs = bitmapFontsConfigs;
   man.renderer = renderer;
 

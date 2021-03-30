@@ -1,7 +1,5 @@
 import * as PIXI from 'pixi.js';
 
-import { mergeDeep } from './helpers';
-
 import _shortcuts from './shortcuts';
 
 export module DynamicBitmapFonts {
@@ -14,6 +12,7 @@ export module DynamicBitmapFonts {
     export const DIGITS = "0123456789";
     export const SPACE = " ";
     export const SPECIAL = SPACE + "!?@#%&\"'*/\-+=<>,.:;_()";
+    export const BASIC_PUNCTUATION = SPACE + "!?-+=,.:;\"";
     export const CURRENCY = "$¢£¤¥֏؋߾߿৲৳৻૱௹฿៛₠₡₢₣₤₥₦₧₨₩₪₫€₭₮₯₰₱₲₳₴₵₶₷₸₹₺₻₼₽₾₿꠸﷼﹩＄￠￡￥￦𑿝𑿞𑿟𑿠𞋿𞲰";
 
     export const AZ = AZ_UPPERCASE + AZ_LOWERCASE;
@@ -27,7 +26,7 @@ export module DynamicBitmapFonts {
   export type FontConfiguration = {
     style: Partial<PIXI.TextStyle>;
     options: {
-      chars?: string | string[] | string[][];
+      chars?: string;
       resolution?: number;
       textureWidth?: number;
       textureHeight?: number;
@@ -46,11 +45,9 @@ export module DynamicBitmapFonts {
     pageTextures?: Record<number,PIXI.Texture>
   };
 
-  //// SHORTCUTS ////
+  //// HELPERS ////
 
   export const shortcuts = _shortcuts;
-
-  //// HELPERS ////
 
   export function combineStringValues(val: any, keys?:string[]): string {
     if (typeof val === "string") {
@@ -79,11 +76,11 @@ export module DynamicBitmapFonts {
   export class Manager<BitmapFontName extends string = string> {
     public readonly defaultFontConfiguration:Omit<FontConfiguration,'style'> = {
       options: {
-        chars: CHARACTERS.ASCIIish,
+        chars: '',
         resolution: 1.0,
         padding: 1,
-        textureWidth: 512,
-        textureHeight: 512,
+        textureWidth: 1024,
+        textureHeight: 1024,
       },
       xOffset: 0.0,
       yOffset: 0.0,
@@ -95,44 +92,37 @@ export module DynamicBitmapFonts {
      * Use to add any support for any parts of the text that would be dynamic
      * (i.e. aren't included in predefined localization files) 
      **/
-    public requiredCharacters:string = '';
+    public requiredCharactersForAllFonts:string = '';
     public translations:any;
     public configs:Record<BitmapFontName,FontConfiguration> = {} as any;
     public renderer:PIXI.Renderer|null = null;
     
     public createBitmapFonts() {
-      const defaultChars = [
-        ...extractUniqueCharacters(
-          //// From translations json
-          this.translations,
-          //// Add characters, defined as required regardless of language
-          this.requiredCharacters,
-        )
-      ].sort();
-
       const entries = Object.entries(this.configs) as [BitmapFontName, FontConfiguration][];
 
       return entries.map(
-        ([bitmapfontName, originalConfig]) => {
-          const config = mergeDeep<FontConfiguration>(
-            this.defaultFontConfiguration, 
-            { options: { chars: defaultChars } },
-            originalConfig,
-          );
-          return [bitmapfontName,this.createBitmapFont(bitmapfontName, config)] as const;
+        ([bitmapfontName, bitmapFontConfig]) => {
+          return [bitmapfontName,this.createBitmapFont(bitmapfontName, bitmapFontConfig)] as const;
         }
       ).reduce(
-        (a,[bitmapfontName,font]) => ({ ...a, [bitmapfontName]: font }), {}
+        (a,[bitmapfontName,font]) => ({ ...a, [bitmapfontName]: font }), 
+        {}
       )
     }
       
-    private createBitmapFont(fontName:BitmapFontName, config:FontConfiguration) {
+    private createBitmapFont(fontName:BitmapFontName, originalConfig:FontConfiguration) {
+      const config = mergeDeep<FontConfiguration>(
+        this.defaultFontConfiguration, 
+        originalConfig,
+      );
+
+      config.options.chars += this.requiredCharactersForAllFonts;
       if ( config.localeKeysWhiteList ) {
-        const allChars = combineStringValues(this.translations, config.localeKeysWhiteList);
-        const uniqueChars = [ ...new Set([...allChars]) ].filter(c => c !== '\n').sort().join('');
-        console.log(fontName, uniqueChars )
-        config.options.chars = uniqueChars;
+        config.options.chars += combineStringValues(this.translations, config.localeKeysWhiteList);
+      } else {
+        config.options.chars += combineStringValues(this.translations);
       }
+      config.options.chars = [ ...new Set([...config.options.chars]) ].filter(c => c !== '\n').sort().join('');
 
       if (config?.style?.dropShadowDistance) {
         config.style.dropShadowDistance *= config.options.resolution;
@@ -152,7 +142,7 @@ export module DynamicBitmapFonts {
         }
       }
 
-      const chars = Object.values(font.chars) as {
+      const characters = Object.values(font.chars) as {
         kerning: any,
         page: number;
         xAdvance: number;
@@ -161,10 +151,10 @@ export module DynamicBitmapFonts {
         yOffset: number;
       }[];
 
-      for (let char of chars) {
-        char.xOffset += config.xOffset ?? 0.0;
-        char.yOffset += config.yOffset ?? 0.0;
-        const texture = char.texture as PIXI.Texture;
+      for (let character of characters) {
+        character.xOffset += config.xOffset ?? 0.0;
+        character.yOffset += config.yOffset ?? 0.0;
+        const texture = character.texture as PIXI.Texture;
         texture.frame.width += config.options.padding ?? 0.0;
         texture.updateUvs();
       }
@@ -172,6 +162,38 @@ export module DynamicBitmapFonts {
       return font;
     }
   }
+}
+
+function isObject(item:any) {
+  return item && typeof item === 'object' && !Array.isArray(item);
+}
+
+function mergeDeep<T>(target:Partial<T>, ...sources:(Partial<T>|undefined|null)[]):T {
+  if (!sources.length) {
+    throw new Error(`No sources for mergeDeep()`);
+  }
+
+  if (!isObject(target)) {
+    throw new Error(`Target is not an object\n` + target);
+  }
+
+  return [target,...sources].reduce<T>(
+    (a,c) => {
+      if ( c !== undefined && c !== null ) {
+        for (const key in c) {
+          if ( c[key] !== undefined ) {
+            if (isObject(c[key])) {
+              a[key] = mergeDeep( isObject(a[key]) ? a[key] : {}, c[key]);
+            } else {
+              a[key] = c[key]!;
+            }
+          }
+        }
+      }
+      return a;
+    },
+    {} as T
+  )
 }
 
 export default DynamicBitmapFonts;

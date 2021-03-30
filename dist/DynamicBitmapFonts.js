@@ -48,21 +48,7 @@ var PIXI = require("pixi.js");
 var shortcuts_1 = require("./shortcuts");
 var DynamicBitmapFonts;
 (function (DynamicBitmapFonts) {
-    var CHARACTERS;
-    (function (CHARACTERS) {
-        CHARACTERS.NONE = "";
-        CHARACTERS.ASCII = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?@#%&\"'`*|/\-+=<>,.:;^_~()[]{}";
-        CHARACTERS.AZ_UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        CHARACTERS.AZ_LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
-        CHARACTERS.DIGITS = "0123456789";
-        CHARACTERS.SPACE = " ";
-        CHARACTERS.SPECIAL = CHARACTERS.SPACE + "!?@#%&\"'*/\-+=<>,.:;_()";
-        CHARACTERS.BASIC_PUNCTUATION = CHARACTERS.SPACE + "!?-+=,.:;\"";
-        CHARACTERS.CURRENCY = "$¢£¤¥֏؋߾߿৲৳৻૱௹฿៛₠₡₢₣₤₥₦₧₨₩₪₫€₭₮₯₰₱₲₳₴₵₶₷₸₹₺₻₼₽₾₿꠸﷼﹩＄￠￡￥￦𑿝𑿞𑿟𑿠𞋿𞲰";
-        CHARACTERS.AZ = CHARACTERS.AZ_UPPERCASE + CHARACTERS.AZ_LOWERCASE;
-        CHARACTERS.ALPHANUMERIC = CHARACTERS.AZ + CHARACTERS.DIGITS;
-        CHARACTERS.ASCIIish = CHARACTERS.ALPHANUMERIC + CHARACTERS.SPECIAL;
-    })(CHARACTERS = DynamicBitmapFonts.CHARACTERS || (DynamicBitmapFonts.CHARACTERS = {}));
+    //// TYPES ////
     //// HELPERS ////
     DynamicBitmapFonts.shortcuts = shortcuts_1["default"];
     function combineStringValues(val, keys) {

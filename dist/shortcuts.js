@@ -19,6 +19,21 @@ exports.shortcuts = void 0;
 var PIXI = require("pixi.js");
 var shortcuts;
 (function (shortcuts) {
+    var CHARACTERS;
+    (function (CHARACTERS) {
+        CHARACTERS.NONE = "";
+        CHARACTERS.ASCII = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?@#%&\"'`*|/\-+=<>,.:;^_~()[]{}";
+        CHARACTERS.AZ_UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        CHARACTERS.AZ_LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
+        CHARACTERS.DIGITS = "0123456789";
+        CHARACTERS.SPACE = " ";
+        CHARACTERS.SPECIAL = CHARACTERS.SPACE + "!?@#%&\"'*/\-+=<>,.:;_()";
+        CHARACTERS.BASIC_PUNCTUATION = CHARACTERS.SPACE + "!?-+=,.:;\"";
+        CHARACTERS.CURRENCY = "$¢£¤¥֏؋߾߿৲৳৻૱௹฿៛₠₡₢₣₤₥₦₧₨₩₪₫€₭₮₯₰₱₲₳₴₵₶₷₸₹₺₻₼₽₾₿꠸﷼﹩＄￠￡￥￦𑿝𑿞𑿟𑿠𞋿𞲰";
+        CHARACTERS.AZ = CHARACTERS.AZ_UPPERCASE + CHARACTERS.AZ_LOWERCASE;
+        CHARACTERS.ALPHANUMERIC = CHARACTERS.AZ + CHARACTERS.DIGITS;
+        CHARACTERS.ASCIIish = CHARACTERS.ALPHANUMERIC + CHARACTERS.SPECIAL;
+    })(CHARACTERS = shortcuts.CHARACTERS || (shortcuts.CHARACTERS = {}));
     var TempBMFTextureContainer = /** @class */ (function (_super) {
         __extends(TempBMFTextureContainer, _super);
         function TempBMFTextureContainer(bmfTexture) {

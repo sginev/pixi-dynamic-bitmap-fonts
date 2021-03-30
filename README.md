@@ -33,7 +33,7 @@ dbmf.translation = myTranslationsObject;
  * and usernames.
  */
 
-dbmf.requiredCharacters = DynamicBitmapFonts.CHARACTERS.ALPHANUMERIC;
+dbmf.requiredCharacters = DynamicBitmapFonts.shortcuts.CHARACTERS.ALPHANUMERIC;
 
 /**
  * Keys would be the font name. Values -- that font's configurations.

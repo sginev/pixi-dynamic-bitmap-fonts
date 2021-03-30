@@ -1,6 +1,24 @@
 import * as PIXI from 'pixi.js';
 
 export module shortcuts {
+  export module CHARACTERS {
+    export const NONE = "";
+    export const ASCII = " 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!?@#%&\"'`*|/\-+=<>,.:;^_~()[]{}";
+    
+    export const AZ_UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    export const AZ_LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
+    export const DIGITS = "0123456789";
+    export const SPACE = " ";
+    export const SPECIAL = SPACE + "!?@#%&\"'*/\-+=<>,.:;_()";
+    export const BASIC_PUNCTUATION = SPACE + "!?-+=,.:;\"";
+    export const CURRENCY = "$¢£¤¥֏؋߾߿৲৳৻૱௹฿៛₠₡₢₣₤₥₦₧₨₩₪₫€₭₮₯₰₱₲₳₴₵₶₷₸₹₺₻₼₽₾₿꠸﷼﹩＄￠￡￥￦𑿝𑿞𑿟𑿠𞋿𞲰";
+
+    export const AZ = AZ_UPPERCASE + AZ_LOWERCASE;
+    export const ALPHANUMERIC = AZ + DIGITS;
+
+    export const ASCIIish = ALPHANUMERIC + SPECIAL;
+  }
+
   class TempBMFTextureContainer extends PIXI.Container {
     constructor(private readonly bmfTexture: PIXI.Texture) {
       super();

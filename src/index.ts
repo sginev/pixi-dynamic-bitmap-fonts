@@ -1,5 +1,5 @@
 export * as shortcuts from './shortcuts'
 
-import { DynamicBitmapFonts } from "./DynamicBitmapFonts";
+export * from './DynamicBitmapFonts'
 
-export default DynamicBitmapFonts;
+export { DynamicBitmapFonts as default } from './DynamicBitmapFonts'

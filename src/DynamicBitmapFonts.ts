@@ -1,9 +1,10 @@
 import * as PIXI from 'pixi.js';
 
-import _shortcuts from './shortcuts';
+import * as _shortcuts from './shortcuts';
+import * as _utils from './utils';
 
 export module DynamicBitmapFonts {
-  
+
   //// TYPES ////
 
   export type FontConfiguration = {
@@ -27,34 +28,14 @@ export module DynamicBitmapFonts {
     dynamicBitmapFontConfig?: FontConfiguration, 
     pageTextures?: Record<number,PIXI.Texture>
   };
-
+  
   //// HELPERS ////
+  
+  export const utils = _utils;
 
   export const shortcuts = _shortcuts;
 
-  export function combineStringValues(val: any, keys?:string[]): string {
-    if (typeof val === "string") {
-      return val;
-    }
-    return Object.entries<string>(val).reduce(
-      (a, [key,value]) => {
-        return (!keys || keys.includes(key) )
-          ? a + combineStringValues(value, keys)
-          : a
-      }, 
-      ""
-    );
-  }
-
-  export function extractUniqueCharacters(
-    ...objects: (Record<string, any> | string)[]
-  ) {
-    const fullString = objects
-      .reduce<string>((a, c) => a + combineStringValues(c), "");
-    return [ ...new Set([...fullString]) ]
-      .filter(c => c !== '\n')
-      .sort();
-  }
+  //// MANAGER ////
 
   export class Manager<BitmapFontName extends string = string> {
     public readonly defaultFontConfiguration:Omit<FontConfiguration,'style'> = {
@@ -101,9 +82,9 @@ export module DynamicBitmapFonts {
 
       config.options.chars += this.requiredCharactersForAllFonts;
       if ( config.localeKeysWhiteList ) {
-        config.options.chars += combineStringValues(this.translations, config.localeKeysWhiteList);
+        config.options.chars += utils.combineStringValues(this.translations, config.localeKeysWhiteList);
       } else {
-        config.options.chars += combineStringValues(this.translations);
+        config.options.chars += utils.combineStringValues(this.translations);
       }
       config.options.chars = [ ...new Set([...config.options.chars]) ].filter(c => c !== '\n').sort().join('');
 

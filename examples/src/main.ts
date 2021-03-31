@@ -40,7 +40,7 @@ export function main({ stage, renderer }: PIXI.Application) {
     const font = getFonts()[fontIndex];
     console.log( 
       `[${ fontIndex }] "${ font.name }"
-        ${ [...DynamicBitmapFonts.extractUniqueCharacters(man.translations)].join('') }` )
+        ${ [...DynamicBitmapFonts.utils.extractUniqueCharacters(man.translations)].join('') }` )
      
     if ( ! font.pageTextures ) {
       return;

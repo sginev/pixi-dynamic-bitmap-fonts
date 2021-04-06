@@ -15,7 +15,7 @@
   "scripts": {
     "build": "tsc",
     "dryrun": "npm run build && npm publish --dry-run",
-    "release": "npm run build && git add dist && git commit -m build && npm version patch -m \"Bump to v%s\" && npm publish"
+    "release": "npm run build && npm version patch -m \"Bump to v%s\" && npm publish"
   },
   "peerDependencies": {
     "pixi.js": "^5.3.6"

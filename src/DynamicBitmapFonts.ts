@@ -60,27 +60,23 @@ export module DynamicBitmapFonts {
     public translations:any;
     public configs:Record<BitmapFontName,FontConfiguration> = {} as any;
     public renderer:PIXI.Renderer|null = null;
-    
+
     public createBitmapFonts() {
       const entries = Object.entries(this.configs) as [BitmapFontName, FontConfiguration][];
-
-      return entries.map(
-        ([bitmapfontName, bitmapFontConfig]) => {
-          return [bitmapfontName,this.createBitmapFont(bitmapfontName, bitmapFontConfig)] as const;
-        }
-      ).reduce(
-        (a,[bitmapfontName,font]) => ({ ...a, [bitmapfontName]: font }), 
-        {}
+      return entries.reduce(
+        (a,[name,originalConfig]) => {
+          const config = mergeDeep<FontConfiguration>(
+            this.defaultFontConfiguration, 
+            originalConfig,
+          );
+          config.options.chars += String(this.requiredCharactersForAllFonts) || '';
+          a[name] = this.createBitmapFont(name, config);
+          return a;
+        }, {} as Record<BitmapFontName,BitmapFont>
       )
     }
       
-    private createBitmapFont(fontName:BitmapFontName, originalConfig:FontConfiguration) {
-      const config = mergeDeep<FontConfiguration>(
-        this.defaultFontConfiguration, 
-        originalConfig,
-      );
-
-      config.options.chars += this.requiredCharactersForAllFonts;
+    private createBitmapFont(fontName:BitmapFontName, config:FontConfiguration) {
       if ( config.localeKeysWhiteList ) {
         config.options.chars += utils.combineStringValues(this.translations, config.localeKeysWhiteList);
       } else {

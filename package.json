@@ -18,7 +18,7 @@
     "release": "npm run build && git add dist && git commit -m build && npm version patch -m \"Bump to v%s\" && npm publish"
   },
   "peerDependencies": {
-    "pixi.js": "5.3.x"
+    "pixi.js": "^5.3.6"
   },
   "devDependencies": {
     "@types/node": "^14.14.35",

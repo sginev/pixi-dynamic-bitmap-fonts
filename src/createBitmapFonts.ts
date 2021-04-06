@@ -2,8 +2,8 @@ import * as utils from './utils';
 
 import DynamicBitmapFonts from '.';
 
-export type FontConfiguration = DynamicBitmapFonts.FontConfiguration;
-export type BitmapFont = DynamicBitmapFonts.BitmapFont;
+type FontConfiguration = DynamicBitmapFonts.FontConfiguration;
+type BitmapFont = DynamicBitmapFonts.BitmapFont;
 
 export function createBitmapFonts<BitmapFontName extends string = string>(
   configs:Record<BitmapFontName,FontConfiguration> = {} as any,

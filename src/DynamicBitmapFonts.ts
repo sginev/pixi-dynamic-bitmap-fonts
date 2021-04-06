@@ -64,63 +64,21 @@ export module DynamicBitmapFonts {
 
     public createBitmapFonts() {
       const entries = Object.entries(this.configs) as [BitmapFontName, FontConfiguration][];
-      return entries.reduce(
-        (a,[name,originalConfig]) => {
-          const config = mergeDeep<FontConfiguration>(
-            this.defaultFontConfiguration, 
-            originalConfig,
-          );
-          config.options.chars += String(this.requiredCharactersForAllFonts) || '';
-          a[name] = this.createBitmapFont(name, config);
-          return a;
-        }, {} as Record<BitmapFontName,BitmapFont>
+      return createBitmapFonts(
+        entries.reduce(
+          (a,[name,originalConfig]) => {
+            const config = mergeDeep<FontConfiguration>(
+              this.defaultFontConfiguration, 
+              originalConfig,
+            );
+            config.options.chars += String(this.requiredCharactersForAllFonts) || '';
+            a[name] = config;
+            return a;
+          }, {} as Record<BitmapFontName,FontConfiguration>
+        ),
+        this.translations,
+        this.renderer,
       )
-    }
-      
-    private createBitmapFont(fontName:BitmapFontName, config:FontConfiguration) {
-      if ( config.localeKeysWhiteList ) {
-        config.options.chars += utils.combineStringValues(this.translations, config.localeKeysWhiteList);
-      } else {
-        config.options.chars += utils.combineStringValues(this.translations);
-      }
-      config.options.chars = [ ...new Set([...config.options.chars]) ].filter(c => c !== '\n').sort().join('');
-
-      if (config?.style?.dropShadowDistance) {
-        config.style.dropShadowDistance *= config.options.resolution;
-      }
-
-      const font:BitmapFont = Object.assign(
-        PIXI.BitmapFont.from(fontName, config.style, config.options), 
-        { dynamicBitmapFontConfig: config, name : fontName }
-      )
-
-      if ( config.modifyTexture ) {
-        for (const key in font.pageTextures) {
-          font.pageTextures[key] = config.modifyTexture(font.pageTextures[key], this.renderer);
-          for ( const c in font.chars ) {
-            font.chars[c].texture.baseTexture = font.pageTextures[key].baseTexture;
-          }
-        }
-      }
-
-      const characters = Object.values(font.chars) as {
-        kerning: any,
-        page: number;
-        xAdvance: number;
-        texture: PIXI.Texture;
-        xOffset: number;
-        yOffset: number;
-      }[];
-
-      for (let character of characters) {
-        character.xOffset += config.xOffset ?? 0.0;
-        character.yOffset += config.yOffset ?? 0.0;
-        const texture = character.texture as PIXI.Texture;
-        texture.frame.width += config.options.padding ?? 0.0;
-        texture.updateUvs();
-      }
-
-      return font;
     }
   }
 }

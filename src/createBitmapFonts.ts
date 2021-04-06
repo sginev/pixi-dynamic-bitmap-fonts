@@ -1,32 +1,13 @@
 import * as utils from './utils';
 
-export type FontConfiguration = {
-  style: Partial<PIXI.TextStyle>;
-  options: {
-    chars?: string;
-    resolution?: number;
-    textureWidth?: number;
-    textureHeight?: number;
-    padding?: number;
-  }
-  xOffset?: number;
-  yOffset?: number;
-  
-  localeKeysWhiteList?: string[];
-  modifyTexture?: (texture:PIXI.Texture, renderer:null|PIXI.Renderer)=>PIXI.Texture
-};
+import DynamicBitmapFonts from '.';
 
-export type BitmapFont = PIXI.BitmapFont & { 
-  name: string,
-  dynamicBitmapFontConfig?: FontConfiguration, 
-  pageTextures?: Record<number,PIXI.Texture>
-};
-
-
+export type FontConfiguration = DynamicBitmapFonts.FontConfiguration;
+export type BitmapFont = DynamicBitmapFonts.BitmapFont;
 
 export function createBitmapFonts<BitmapFontName extends string = string>(
-  translations:any,
   configs:Record<BitmapFontName,FontConfiguration> = {} as any,
+  translations:any,
   renderer:PIXI.Renderer|null = null,
 ) {
   function createBitmapFont(fontName:BitmapFontName, config:FontConfiguration) {
@@ -83,38 +64,4 @@ export function createBitmapFonts<BitmapFontName extends string = string>(
         return a;
       }, {} as Record<BitmapFontName,BitmapFont>
     )
-}
-
-
-
-function isObject(item:any) {
-  return item && typeof item === 'object' && !Array.isArray(item);
-}
-
-function mergeDeep<T>(target:Partial<T>, ...sources:(Partial<T>|undefined|null)[]):T {
-  if (!sources.length) {
-    throw new Error(`No sources for mergeDeep()`);
-  }
-
-  if (!isObject(target)) {
-    throw new Error(`Target is not an object\n` + target);
-  }
-
-  return [target,...sources].reduce<T>(
-    (a,c) => {
-      if ( c !== undefined && c !== null ) {
-        for (const key in c) {
-          if ( c[key] !== undefined ) {
-            if (isObject(c[key])) {
-              a[key] = mergeDeep( isObject(a[key]) ? a[key] : {}, c[key]);
-            } else {
-              a[key] = c[key]!;
-            }
-          }
-        }
-      }
-      return a;
-    },
-    {} as T
-  )
 }

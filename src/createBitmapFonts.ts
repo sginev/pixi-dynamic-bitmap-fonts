@@ -1,8 +1,6 @@
 import * as PIXI from 'pixi.js';
-
 import * as utils from './utils';
-
-import DynamicBitmapFonts from '.';
+import type DynamicBitmapFonts from '.';
 
 type FontConfiguration = DynamicBitmapFonts.FontConfiguration;
 type BitmapFont = DynamicBitmapFonts.BitmapFont;

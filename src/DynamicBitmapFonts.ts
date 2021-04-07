@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js';
+import type * as PIXI from 'pixi.js';
 import { createBitmapFonts } from './createBitmapFonts';
 
 import * as _shortcuts from './shortcuts';

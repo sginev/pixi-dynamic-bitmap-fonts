@@ -1,5 +1,7 @@
 import * as PIXI from 'pixi.js';
 
+import { DynamicBitmapFonts } from ".";
+
 ////
 
 export module CHARACTERS {
@@ -32,11 +34,15 @@ class TempBMFTextureContainer extends PIXI.Container {
 }
 
 export function modifyTextureAsPixiObject(
-  modifyPixiObject: (o: TempBMFTextureContainer) => void
+  modifyPixiObject: (
+    container: TempBMFTextureContainer, 
+    config:DynamicBitmapFonts.FontConfiguration
+  ) => void
 ) {
   return (
     texture: PIXI.Texture,
-    renderer: null | PIXI.Renderer
+    renderer: null | PIXI.Renderer,
+    config:DynamicBitmapFonts.FontConfiguration
   ): PIXI.Texture => {
     if (!renderer) {
       throw new Error(`Renderer is ${renderer}`);
@@ -45,7 +51,7 @@ export function modifyTextureAsPixiObject(
     const container = new TempBMFTextureContainer(texture);
     container.addTextureSpriteCopy();
 
-    modifyPixiObject(container);
+    modifyPixiObject(container, config);
 
     const renderTexture = PIXI.RenderTexture.create({
       width: texture.width,

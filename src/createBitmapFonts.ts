@@ -29,7 +29,7 @@ export function createBitmapFonts<BitmapFontName extends string = string>(
 
     if ( config.modifyTexture ) {
       for (const key in font.pageTextures) {
-        font.pageTextures[key] = config.modifyTexture(font.pageTextures[key], renderer);
+        font.pageTextures[key] = config.modifyTexture(font.pageTextures[key], renderer, config);
         for ( const c in font.chars ) {
           font.chars[c].texture.baseTexture = font.pageTextures[key].baseTexture;
         }

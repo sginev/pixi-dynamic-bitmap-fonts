@@ -21,7 +21,7 @@ export module DynamicBitmapFonts {
     yOffset?: number;
     
     localeKeysWhiteList?: string[];
-    modifyTexture?: (texture:PIXI.Texture, renderer:null|PIXI.Renderer)=>PIXI.Texture
+    modifyTexture?: (texture:PIXI.Texture, renderer:null|PIXI.Renderer, config:FontConfiguration)=>PIXI.Texture
   };
 
   export type BitmapFont = PIXI.BitmapFont & { 
@@ -44,12 +44,11 @@ export module DynamicBitmapFonts {
         chars: '',
         resolution: 1.0,
         padding: 1,
-        textureWidth: 1024,
-        textureHeight: 1024,
+        textureWidth: undefined,
+        textureHeight: undefined,
       },
       xOffset: 0.0,
       yOffset: 0.0,
-
     }
 
     /** 

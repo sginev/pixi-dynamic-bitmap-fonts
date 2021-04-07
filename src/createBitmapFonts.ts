@@ -1,3 +1,5 @@
+import * as PIXI from 'pixi.js';
+
 import * as utils from './utils';
 
 import DynamicBitmapFonts from '.';

@@ -62,6 +62,8 @@ export module DynamicBitmapFonts {
     public renderer:PIXI.Renderer|null = null;
     public scaleFactor:number = 1.0;
 
+    public ignorePixiRendererResolution:boolean = true;
+
     public createBitmapFonts() {
       const entries = Object.entries(this.configs) as [BitmapFontName, FontConfiguration][];
       return createBitmapFonts(
@@ -71,7 +73,11 @@ export module DynamicBitmapFonts {
               this.defaultFontConfiguration, 
               originalConfig,              
             );
-            config.options.resolution = (config.options.resolution ?? 1.0) * this.scaleFactor;
+            config.options.resolution ??= 1.0;
+            config.options.resolution *= this.scaleFactor;
+            if(!this.ignorePixiRendererResolution) {
+              config.options.resolution *= this.renderer.resolution;
+            }
             config.options.chars += String(this.requiredCharactersForAllFonts) || '';
             a[name] = config;
             return a;

@@ -60,6 +60,7 @@ export module DynamicBitmapFonts {
     public translations:any;
     public configs:Record<BitmapFontName,FontConfiguration> = {} as any;
     public renderer:PIXI.Renderer|null = null;
+    public scaleFactor:number = 1.0;
 
     public createBitmapFonts() {
       const entries = Object.entries(this.configs) as [BitmapFontName, FontConfiguration][];
@@ -68,8 +69,9 @@ export module DynamicBitmapFonts {
           (a,[name,originalConfig]) => {
             const config = mergeDeep<FontConfiguration>(
               this.defaultFontConfiguration, 
-              originalConfig,
+              originalConfig,              
             );
+            config.options.resolution = (config.options.resolution ?? 1.0) * this.scaleFactor;
             config.options.chars += String(this.requiredCharactersForAllFonts) || '';
             a[name] = config;
             return a;

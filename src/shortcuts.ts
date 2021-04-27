@@ -56,7 +56,7 @@ export function modifyTextureAsPixiObject(
     const renderTexture = PIXI.RenderTexture.create({
       width: texture.width,
       height: texture.height,
-      resolution: 1,
+      resolution: config?.options?.resolution ?? 1.0,
       scaleMode: PIXI.SCALE_MODES.LINEAR
     });
     renderer.render(container, renderTexture);

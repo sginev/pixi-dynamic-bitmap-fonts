@@ -1,5 +1,7 @@
-import * as PIXI from 'pixi.js';
-
+import { SCALE_MODES } from "@pixi/constants";
+import { Renderer, RenderTexture, Texture } from "@pixi/core";
+import { Container } from "@pixi/display";
+import { Sprite } from "@pixi/sprite";
 import { DynamicBitmapFonts } from ".";
 
 ////
@@ -24,12 +26,12 @@ export module CHARACTERS {
 
 ////
 
-class TempBMFTextureContainer extends PIXI.Container {
-  constructor(private readonly bmfTexture: PIXI.Texture) {
+class TempBMFTextureContainer extends Container {
+  constructor(private readonly bmfTexture: Texture) {
     super();
   }
   public addTextureSpriteCopy() {
-    return this.addChild(new PIXI.Sprite(this.bmfTexture));
+    return this.addChild(new Sprite(this.bmfTexture));
   }
 }
 
@@ -40,10 +42,10 @@ export function modifyTextureAsPixiObject(
   ) => void
 ) {
   return (
-    texture: PIXI.Texture,
-    renderer: null | PIXI.Renderer,
+    texture: Texture,
+    renderer: null | Renderer,
     config:DynamicBitmapFonts.FontConfiguration
-  ): PIXI.Texture => {
+  ): Texture => {
     if (!renderer) {
       throw new Error(`Renderer is ${renderer}`);
     }
@@ -53,14 +55,14 @@ export function modifyTextureAsPixiObject(
 
     modifyPixiObject(container, config);
 
-    const renderTexture = PIXI.RenderTexture.create({
+    const renderTexture = RenderTexture.create({
       width: texture.width,
       height: texture.height,
       resolution: config?.options?.resolution ?? 1.0,
-      scaleMode: PIXI.SCALE_MODES.LINEAR
+      scaleMode: SCALE_MODES.LINEAR
     });
-    renderer.render(container, renderTexture);
+    renderer.render(container, { renderTexture });
 
-    return new PIXI.Texture(renderTexture.baseTexture);
+    return new Texture(renderTexture.baseTexture);
   };
 }

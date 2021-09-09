@@ -1,14 +1,15 @@
-import * as PIXI from 'pixi.js';
+import { BitmapFont } from '@pixi/text-bitmap';
+import { Renderer, Texture } from '@pixi/core';
 import * as utils from './utils';
 import type DynamicBitmapFonts from '.';
 
 type FontConfiguration = DynamicBitmapFonts.FontConfiguration;
-type BitmapFont = DynamicBitmapFonts.BitmapFont;
+type DynamicBitmapFont = DynamicBitmapFonts.DynamicBitmapFont;
 
 export function createBitmapFonts<BitmapFontName extends string = string>(
   configs:Record<BitmapFontName,FontConfiguration> = {} as any,
   translations:any,
-  renderer:PIXI.Renderer|null = null,
+  renderer:Renderer|null = null,
 ) {
   function createBitmapFont(fontName:BitmapFontName, config:FontConfiguration) {
     if ( config.localeKeysWhiteList ) {
@@ -22,8 +23,8 @@ export function createBitmapFonts<BitmapFontName extends string = string>(
       config.style.dropShadowDistance *= config.options.resolution;
     }
 
-    const font:BitmapFont = Object.assign(
-      PIXI.BitmapFont.from(fontName, config.style, config.options), 
+    const font:DynamicBitmapFont = Object.assign(
+      BitmapFont.from(fontName, config.style, config.options), 
       { dynamicBitmapFontConfig: config, name : fontName }
     )
 
@@ -40,7 +41,7 @@ export function createBitmapFonts<BitmapFontName extends string = string>(
       kerning: any,
       page: number;
       xAdvance: number;
-      texture: PIXI.Texture;
+      texture: Texture;
       xOffset: number;
       yOffset: number;
     }[];
@@ -48,7 +49,7 @@ export function createBitmapFonts<BitmapFontName extends string = string>(
     for (let character of characters) {
       character.xOffset += config.xOffset ?? 0.0;
       character.yOffset += config.yOffset ?? 0.0;
-      const texture = character.texture as PIXI.Texture;
+      const texture = character.texture as Texture;
       texture.frame.width += config.options.padding ?? 0.0;
       texture.updateUvs();
     }
@@ -62,6 +63,6 @@ export function createBitmapFonts<BitmapFontName extends string = string>(
       (a,[name,config]) => {
         a[name] = createBitmapFont(name, config);
         return a;
-      }, {} as Record<BitmapFontName,BitmapFont>
+      }, {} as Record<BitmapFontName,DynamicBitmapFont>
     )
 }

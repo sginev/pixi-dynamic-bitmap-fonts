@@ -1,4 +1,6 @@
-import type * as PIXI from 'pixi.js';
+import { Renderer, Texture } from '@pixi/core';
+import { TextStyle } from '@pixi/text';
+import { BitmapFont } from '@pixi/text-bitmap';
 import { createBitmapFonts } from './createBitmapFonts';
 
 import * as _shortcuts from './shortcuts';
@@ -9,7 +11,7 @@ export module DynamicBitmapFonts {
   //// TYPES ////
 
   export type FontConfiguration = {
-    style: Partial<PIXI.TextStyle>;
+    style: Partial<TextStyle>;
     options: {
       chars?: string;
       resolution?: number;
@@ -21,13 +23,13 @@ export module DynamicBitmapFonts {
     yOffset?: number;
     
     localeKeysWhiteList?: string[];
-    modifyTexture?: (texture:PIXI.Texture, renderer:null|PIXI.Renderer, config:FontConfiguration)=>PIXI.Texture
+    modifyTexture?: (texture:Texture, renderer:null|Renderer, config:FontConfiguration)=>Texture
   };
 
-  export type BitmapFont = PIXI.BitmapFont & { 
+  export type DynamicBitmapFont = BitmapFont & { 
     name: string,
     dynamicBitmapFontConfig?: FontConfiguration, 
-    pageTextures?: Record<number,PIXI.Texture>
+    pageTextures?: Record<number, Texture>
   };
   
   //// HELPERS ////
@@ -59,7 +61,7 @@ export module DynamicBitmapFonts {
     public requiredCharactersForAllFonts:string = '';
     public translations:any;
     public configs:Record<BitmapFontName,FontConfiguration> = {} as any;
-    public renderer:PIXI.Renderer|null = null;
+    public renderer:Renderer|null = null;
     public scaleFactor:number = 1.0;
 
     public ignorePixiRendererResolution:boolean = true;

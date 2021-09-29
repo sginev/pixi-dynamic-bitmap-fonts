@@ -1,7 +1,7 @@
 import { Renderer, Texture } from '@pixi/core';
 import { TextStyle } from '@pixi/text';
 import { BitmapFont } from '@pixi/text-bitmap';
-import { createBitmapFonts } from './createBitmapFonts';
+import { createBitmapFonts, createBitmapFontsAsync } from './createBitmapFonts';
 
 import * as _shortcuts from './shortcuts';
 import * as _utils from './utils';
@@ -66,9 +66,10 @@ export module DynamicBitmapFonts {
 
     public ignorePixiRendererResolution:boolean = true;
 
-    public createBitmapFonts() {
+    public createBitmapFonts(async:boolean = false) {
       const entries = Object.entries(this.configs) as [BitmapFontName, FontConfiguration][];
-      return createBitmapFonts(
+      const fn = async ? createBitmapFontsAsync : createBitmapFonts;
+      return fn(
         entries.reduce(
           (a,[name,originalConfig]) => {
             const config = mergeDeep<FontConfiguration>(

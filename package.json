@@ -17,7 +17,7 @@
     "dryrun": "npm run build && npm publish --dry-run",
     "release": "npm run build && npm version patch -m \"Bump to v%s\" && npm publish"
   },
-  "peerDependencies": {
+  "dependencies": {
     "@pixi/constants": "^6.1.2",
     "@pixi/core": "^6.1.2",
     "@pixi/display": "^6.1.2",
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@types/node": "^14.14.35",
     "@types/typescript": "^2.0.0",
+    "@types/web": "0.0.37",
     "typescript": "^4.2.3"
   }
 }
